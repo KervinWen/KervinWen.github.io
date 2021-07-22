@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>a</title>
+      <link href="/2021/07/21/a/"/>
+      <url>/2021/07/21/a/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>test</p><footer><strong>[author[</strong><cite>source]] [link] [source_link_title]</cite></footer></blockquote><div class="note info flat"><p>点击可查看大图</p></div><div class="justified-gallery"><p><img src="/2021/07/21/a/GuiDao.webp"><br><img src="/2021/07/21/a/RoomAtNight.webp"><br><img src="/2021/07/21/a/LuckHei.webp"></p>          </div><h2 id="指定语言，高亮"><a href="#指定语言，高亮" class="headerlink" title="指定语言，高亮"></a>指定语言，高亮</h2><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">effect</span>&lt;<span class="title">T</span> = <span class="title">any</span>&gt;(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">  fn: () =&gt; T,</span></span></span><br><span class="line"><span class="params"><span class="function">  options: ReactiveEffectOptions = EMPTY_OBJ</span></span></span><br><span class="line"><span class="params"><span class="function"></span>): <span class="title">ReactiveEffect</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  <span class="comment">// 如果已经是effect，则重置</span></span><br><span class="line">  <span class="keyword">if</span> (isEffect(fn)) &#123;</span><br><span class="line">    fn = fn.raw</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 创建effect</span></span><br><span class="line">  <span class="keyword">const</span> effect = createReactiveEffect(fn, options)</span><br><span class="line">  <span class="comment">// 如果不是惰性执行，先执行一次</span></span><br><span class="line">  <span class="keyword">if</span> (!options.lazy) &#123;</span><br><span class="line">    effect()</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> effect</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h2 id="附加说明-amp-url"><a href="#附加说明-amp-url" class="headerlink" title="附加说明&amp;url"></a>附加说明&amp;url</h2><figure class="highlight plaintext"><figcaption><span>_.compact</span><a href="http://underscorejs.org/#compact">Underscore.js</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">_.compact([0, 1, false, 2, &#x27;&#x27;, 3]);</span><br><span class="line">=&gt; [1, 2, 3]</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><figcaption><span>[title] [lang:language] [url] [link text]</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">code snippet</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Third</title>
       <link href="/2021/07/19/Third/"/>
       <url>/2021/07/19/Third/</url>
