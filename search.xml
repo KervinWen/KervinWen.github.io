@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>计网|自顶向下|概述</title>
+      <link href="/2021/09/02/%E8%AE%A1%E7%BD%91-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B-%E6%A6%82%E8%BF%B0/"/>
+      <url>/2021/09/02/%E8%AE%A1%E7%BD%91-%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B-%E6%A6%82%E8%BF%B0/</url>
+      
+        <content type="html"><![CDATA[<h1 id="核心观点"><a href="#核心观点" class="headerlink" title="核心观点"></a>核心观点</h1><h2 id="分层"><a href="#分层" class="headerlink" title="分层"></a>分层</h2><p>首先，我们要明确两个概念【功能】与【服务】</p><ul><li>功能：是拥有的能力</li><li>服务：是功能的体现</li></ul><p>在计网中，有很明显的分层特性：</p><ul><li>每层【功能】基于下层的【服务】，协调软硬件实现</li><li>每层通过接口给上层提供【服务】</li></ul><h1 id="分层简介【对等层逻辑来看】"><a href="#分层简介【对等层逻辑来看】" class="headerlink" title="分层简介【对等层逻辑来看】"></a>分层简介【对等层逻辑来看】</h1><ul><li>应用层<ul><li>主要协议：Hyper TextTP、FileTP、Simple Mail TransferP</li><li>基于传输层应用进程间通信，实现：<strong>不同类型应用间的通信</strong></li></ul></li><li>传输层<ul><li>主要协议：Transmission ControlP【偏向可靠性】、User DatagramP【偏向实时性】</li><li>基于网络层端到端【E2E，源to目标主机】通信，实现：<strong>应用进程的通信</strong>，并<strong>根据偏向性提供加强服务</strong></li></ul></li><li>网络层<ul><li>主要协议：<ul><li>InternetP</li></ul></li><li>基于数据链路层点到点【P2P】通信，实现：<strong>End2E【源to目标主机】的Package为单位的数据通信</strong></li><li>特性：Best Ever,尽力而为，不保证</li><li>解决方案：<ul><li>传统的IP+路由【固定、功能拓展性低】<ol><li>路由协议交换路由信息</li><li>路由算法计算路由表</li><li>IP协议基于路由表对到来的IP分组做转发处理</li></ol></li><li>现代的Software Defined Network【功能集合丰富、灵活】<ol><li>控制平面【网络操作系统】<ul><li>基于不同的网络应用计算FlowTable【各种字段MAC、IP等】</li><li>将FlowTable，流表下发给switch</li></ul></li><li>数据平面【switch，交换机】<ul><li>基于FlowTable对分组匹配、操作</li><li>实现不同的功能：防火墙、路由转发等</li></ul></li></ol></li></ul></li></ul></li><li>数据链路层与局域网【网卡、WLAN等】<ul><li>基于物理层模数转换、物理信号传输，实现：<strong>相邻两点Point2P的帧为单位的数据通信</strong></li></ul></li><li>物理层<ul><li>基于Media介质实现：<strong>模数转换、物理信号传输实现bit为单位的数据通信</strong></li></ul></li></ul><h1 id="主要概念"><a href="#主要概念" class="headerlink" title="主要概念"></a>主要概念</h1><h2 id="什么是【协议】Protocol"><a href="#什么是【协议】Protocol" class="headerlink" title="什么是【协议】Protocol"></a>什么是【协议】Protocol</h2><ul><li>对等层实体通信所遵守的规则：语法、语义、时序</li></ul><h2 id="什么是【互联网-网际】Internet"><a href="#什么是【互联网-网际】Internet" class="headerlink" title="什么是【互联网/网际】Internet"></a>什么是【互联网/网际】Internet</h2><ol><li><p>网络</p><ul><li>基于点、边组成的与大小、形状无关的拓扑结构</li></ul></li><li><p>计算机网络</p><ul><li>联网的计算机组成的系统</li><li>节点：<ul><li>主机节点：源、目标</li><li>数据交换节点：转发。包括路由器、交换机【交换机在不同的层有不同的实现：中继器、switch、负载均衡设备】</li></ul></li><li>链路：<ul><li>接入网链路：主机节点接入网的链路</li><li>主干链路：数据交换节点间的链路</li></ul></li></ul></li><li><p>Internet</p><ul><li>基于IP、TCP等一簇协议，实现的一种网网互联的计算机网络</li><li>从服务角度看<ol><li>分布式应用</li><li>为分布式应用提供通信服务的基础设施<ul><li>无连接不可靠</li><li>面向连接可靠</li><li>区分：【见分组交换】<ul><li>面向连接：端维护源、目的地址，路径不固定</li><li>有连接：建立链接，路径固定</li></ul></li></ul></li></ol></li></ul><p> <img src="/static/imgForPosts/NetWork/Summary/InternetInService.jpeg"></p><ul><li>从结构角度看【3个子系统】<ol><li>网络边缘</li><li>网络核心</li><li>接入网、Meida物理媒体</li></ol></li></ul><p> <img src="/static/imgForPosts/NetWork/Summary/InternetInStructure.jpeg"></p></li></ol><h2 id="网络边缘"><a href="#网络边缘" class="headerlink" title="网络边缘"></a>网络边缘</h2><ul><li>端系统【主机】</li><li>应用交互模型<ol><li>C/S模型：Client请求，Server响应</li><li>Peer2P模型：每个端可请求、响应<h2 id="接入网、Media物理媒体"><a href="#接入网、Media物理媒体" class="headerlink" title="接入网、Media物理媒体"></a>接入网、Media物理媒体</h2></li></ol></li><li>有线/无线</li><li>共享/独享</li><li>Media<ul><li>导引型：光纤、双绞线</li><li>非导引型：无线电磁波</li></ul></li></ul><h2 id="网络核心：分组交换、线路交换"><a href="#网络核心：分组交换、线路交换" class="headerlink" title="网络核心：分组交换、线路交换"></a>网络核心：分组交换、线路交换</h2><ul><li>路由和交换机等组成的数据交换网络</li><li>关键功能：<ol><li>路由：计算路由表（路径、跳点等）</li><li>转发：将Package转发到输出链路</li></ol></li></ul><p><img src="/static/imgForPosts/NetWork/Summary/CoreInternet.jpeg"></p><ul><li>数据怎么在网络核心传输？<ol start="0"><li>计算机通信特点：<ul><li>突发性</li><li>间歇性</li></ul></li><li>电路交换（预约服务）<ul><li>原理：通信两端之间分配一条链路、独享资源</li><li>实例：传统固话</li><li>链路（带宽）分片方法：【λ=u/f，波长=波速/频率】<ol><li>频分，Frequency-Division-Multiplexing</li><li>时分，Time</li><li>波分，Wave</li></ol></li><li>用时：建立链接+传输时间+传播延时</li><li>不适合：<ol><li>建立链接用时长</li><li>计算机通信突发性，链路资源会被浪费</li></ol></li></ul></li><li>分组交换（按需服务）<ul><li>原理：<ol><li>数据分为一个个Package</li><li>网络带宽资源不再分片，传输使用全部带宽</li><li>每个<strong>转发节点</strong>进行<strong>存储、转发</strong>的过程。实现整个链路带宽资源每个部分使用时独占，不使用时共享</li></ol></li><li>用时例子：需要在接收到一个完整的Package，再进行处理</li><li>用时：传输时间+传播时延+Package处理时间+排队时延</li><li>排队和丢失：<ul><li>Package会排队、等待传输</li><li>路由缓存用完，Package将会被丢弃</li></ul></li><li>复用：Statistical Time DM,统计时分多路复用<ul><li>时分复用：固定分配时间片，不管是否发送数据</li><li>统计时分：按需分配，只要需要，就分配时隙</li></ul></li><li>网络分类<ul><li>Datagram：面向连接</li><li>Virtual Circuit，虚拟电路：有链接</li></ul></li></ul></li><li>VS<br><img src="/static/imgForPosts/NetWork/Summary/PackageChange.jpeg"></li></ol></li></ul><h2 id="Internet-ISP结构"><a href="#Internet-ISP结构" class="headerlink" title="Internet/ISP结构"></a>Internet/ISP结构</h2><ul><li>Internet Service Provider</li><li>IContentP</li><li>I（X）ExchangeP</li><li>Data Center,有些大公司在ISP附近建立自己的DC,通过ISP连接其他DC，提供高速内容服务</li><li>tier1：国际；2：区域；3…：本地<br><img src="/static/imgForPosts/NetWork/Summary/ISP.jpeg"></li></ul><h2 id="性能：丢包、延时、吞吐量"><a href="#性能：丢包、延时、吞吐量" class="headerlink" title="性能：丢包、延时、吞吐量"></a>性能：丢包、延时、吞吐量</h2><ul><li>丢包<ul><li>路由缓存队列满—&gt;丢弃新的Package</li><li>根据链路、源主机的可靠性决定本身是否重传Package</li></ul></li><li>4种Package延时<ol><li>节点处理延时，Nodal-Processing-Delay</li><li>排队延时，Queueing<ul><li>流量强度：I=La/R：R流量rbps、L每秒分组数、a分组大小【0&lt;=I&lt;1】【预判流量强度，队列堵塞概率，见VS】</li></ul></li><li>传输延时，Transimission<ul><li>Internet Control MessageP,控制报文协议<ul><li>用于在IP主机、路由器之间传递控制信息</li><li>控制信息：网络是否通、目标主机是否可达、路由是否可用等</li></ul></li></ul></li><li>传播延时，Propagation<ul><li>物理介质传播延时</li></ul></li></ol></li><li>吞吐量，<strong>Through</strong>Put<ul><li>设备单位时间处理的<strong>有效</strong>数据量【如接收并转发】</li><li>带宽,Max Netbitrate：链路单位时间传输最大数据量<br><img src="/static/imgForPosts/NetWork/Summary/PackageDelay1.jpeg"><br><img src="/static/imgForPosts/NetWork/Summary/PackageDelay2.jpeg"></li></ul></li></ul><h2 id="协议层次、服务模型"><a href="#协议层次、服务模型" class="headerlink" title="协议层次、服务模型"></a>协议层次、服务模型</h2><ul><li><p>设计实现复杂功能</p><ul><li>功能明确分层（相邻层间调用、服务）【√】</li><li>模块化</li></ul></li><li><p>分层优劣</p><ul><li>优点：<ul><li>功能分拆、独立设计实现</li><li>便于每层技术平滑升级</li></ul></li><li>缺点：<ul><li>信息交换效率较低</li></ul></li></ul></li><li><p>服务模型</p><ul><li>面向连接的服务【通信前：需要连接、准备资源】</li><li>无连接的服务</li></ul></li><li><p>数据单元，DU</p><ul><li>根据大小组合、拆分</li><li>ServiceDU从上层传输–&gt;加工【拆分、组合】–&gt;添加头部信息–&gt;ProtocolDU</li><li>应用层：Message</li><li>传输层：Segment</li><li>网络层：Package/Datagram</li><li>数据链路层：Frame帧</li><li>物理层：bit</li></ul></li></ul><p><img src="/static/imgForPosts/NetWork/Summary/DataUnit1.jpeg"></p><ul><li>DU封装与解封装<br><img src="/static/imgForPosts/NetWork/Summary/DataUnit2.jpeg"></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 前端 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 前端 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>React|Redux</title>
       <link href="/2021/08/19/React-Redux/"/>
       <url>/2021/08/19/React-Redux/</url>
@@ -129,9 +154,9 @@
             
             <tag> 学习笔记 </tag>
             
-            <tag> Vue </tag>
-            
             <tag> 框架 </tag>
+            
+            <tag> Vue </tag>
             
         </tags>
       
