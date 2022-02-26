@@ -1,0 +1,329 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JS现代教程(2) | KervinWen's Blog</title><meta name="keywords" content="JavaScript,学习笔记"><meta name="author" content="KervinWen"><meta name="copyright" content="KervinWen"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="数据类型相关可迭代（Iterable）对象与类数组（array-like）### 可迭代  可迭代都有Symbol.iterator属性 Object.getOwnPropertyDescriptor(Symbol, ‘iterator’) 当用for…of循环时，会调用Symbol.iterator的方法。这个方法必须返回一个迭代器（iterator），即一个有next（）方法的对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS现代教程(2)">
+<meta property="og:url" content="https://kervinwen.github.io/2021/05/29/JS%E7%8E%B0%E4%BB%A3%E6%95%99%E7%A8%8B(2)/index.html">
+<meta property="og:site_name" content="KervinWen&#39;s Blog">
+<meta property="og:description" content="数据类型相关可迭代（Iterable）对象与类数组（array-like）### 可迭代  可迭代都有Symbol.iterator属性 Object.getOwnPropertyDescriptor(Symbol, ‘iterator’) 当用for…of循环时，会调用Symbol.iterator的方法。这个方法必须返回一个迭代器（iterator），即一个有next（）方法的对象">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kervinwen.github.io/static/imgForPosts/JavaScript/JavaScript.jpeg">
+<meta property="article:published_time" content="2021-05-29T14:50:47.000Z">
+<meta property="article:modified_time" content="2022-02-26T17:47:22.350Z">
+<meta property="article:author" content="KervinWen">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kervinwen.github.io/static/imgForPosts/JavaScript/JavaScript.jpeg"><link rel="shortcut icon" href="/static/bcg/LuckKoiFish.webp"><link rel="canonical" href="https://kervinwen.github.io/2021/05/29/JS%E7%8E%B0%E4%BB%A3%E6%95%99%E7%A8%8B(2)/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":500},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"top-right"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'JS现代教程(2)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-02-27 01:47:22'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/static/icon/CuteDargen.webp" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/Photography/"><i class="fa-fw fas fa-video"></i><span> 摄影</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 分类</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/FrontEnd/"><i class="fa-fw fas fa-desktop"></i><span> 前端</span></a></li><li><a class="site-page child" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="fa-fw fas fa-wifi"></i><span> 计算机网络</span></a></li><li><a class="site-page child" href="/categories/%E5%B7%A5%E7%A8%8B%E5%8D%8F%E4%BD%9C/"><i class="fa-fw fab fa-git-square"></i><span> 工程协作</span></a></li><li><a class="site-page child" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fa-fw fas fa-database"></i><span> 数据库</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap" style="height:auto !important"><header class="post-bg" id="page-header" style="background-image: url('/static/imgForPosts/JavaScript/JavaScript.jpeg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">KervinWen's Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/Photography/"><i class="fa-fw fas fa-video"></i><span> 摄影</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 分类</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/FrontEnd/"><i class="fa-fw fas fa-desktop"></i><span> 前端</span></a></li><li><a class="site-page child" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"><i class="fa-fw fas fa-wifi"></i><span> 计算机网络</span></a></li><li><a class="site-page child" href="/categories/%E5%B7%A5%E7%A8%8B%E5%8D%8F%E4%BD%9C/"><i class="fa-fw fab fa-git-square"></i><span> 工程协作</span></a></li><li><a class="site-page child" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"><i class="fa-fw fas fa-database"></i><span> 数据库</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/message/"><i class="fa-fw far fa-comment-dots"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">JS现代教程(2)<a class="post-edit-link" href="null_posts/JS现代教程(2).md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-05-29T14:50:47.000Z" title="发表于 2021-05-29 22:50:47">2021-05-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-02-26T17:47:22.350Z" title="更新于 2022-02-27 01:47:22">2022-02-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaScript/">JavaScript</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/JavaScript/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">667</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>2分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="JS现代教程(2)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2021/05/29/JS%E7%8E%B0%E4%BB%A3%E6%95%99%E7%A8%8B(2)/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2021/05/29/JS%E7%8E%B0%E4%BB%A3%E6%95%99%E7%A8%8B(2)/" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner" style="height:auto !important"><div id="post"><article class="post-content" id="article-container"><!-- <blockquote><p>写作不易，未经作者允许禁止以任何形式转载!<br>如果觉得文章不错，欢迎关注、点赞和分享！</p>
+<p><a href="url">articleName</a></p>
+</blockquote> -->
+
+<!-- hhhh<code></code> -->
+<!-- 见这篇文章：[【三握四挥】](/计网(3)-三握四挥.html) 
+以post文件夹为起点，也可以设置自身文章连接-->
+
+<h2 id="数据类型相关"><a href="#数据类型相关" class="headerlink" title="数据类型相关"></a>数据类型相关</h2><h3 id="可迭代（Iterable）对象与类数组（array-like）"><a href="#可迭代（Iterable）对象与类数组（array-like）" class="headerlink" title="可迭代（Iterable）对象与类数组（array-like）###"></a>可迭代（Iterable）对象与类数组（array-like）###</h3><ol>
+<li><p>可迭代</p>
+<ul>
+<li><strong>可迭代都有Symbol.iterator属性</strong></br></li>
+<li>Object.getOwnPropertyDescriptor(Symbol, ‘iterator’)</br></li>
+<li>当用<strong>for…of循环</strong>时，会<strong>调用Symbol.iterator的方法。这个方法必须返回一个迭代器（iterator），即一个有next（）方法的对象</strong></br></li>
+<li>注意：iterator对象与被迭代对象<strong>是分开</strong>的</br></li>
+<li>如果将iterator方法<strong>内置</strong>，返回的是<strong>被迭代对象本身</strong>，就不能在对象上运行两个for…of循环，因为只有一个迭代器<br><img src="/static/imgForPosts/JavaScript/ModernCourse/iterable1.jpg"><br><img src="/static/imgForPosts/JavaScript/ModernCourse/iterable2.jpg"></br></li>
+</ul>
+</li>
+<li><p>类数组</p>
+<ul>
+<li>具有索引和length属性</br></li>
+</ul>
+</li>
+<li><p><strong>Array.from</strong>处理Iterable和array-like<strong>获得数组</strong></p>
+<ul>
+<li>mapFn函数会在<strong>元素被添加到数组前应用</strong>；thisArg：该函数允许设置this<br><img src="/static/imgForPosts/JavaScript/ModernCourse/arrayFrom.jpg"></br></li>
+<li>range例子<br><img src="/static/imgForPosts/JavaScript/ModernCourse/range1.jpg"><br><img src="/static/imgForPosts/JavaScript/ModernCourse/range2.jpg"></li>
+</ul>
+</li>
+</ol>
+<br/>
+<br/>
+
+<h3 id="Map-and-Set（映射与集合）"><a href="#Map-and-Set（映射与集合）" class="headerlink" title="Map and Set（映射与集合）###"></a>Map and Set（映射与集合）###</h3><ol>
+<li>Map<ul>
+<li><code>[key，value]</code>的集合。<strong>允许任何类型的key</strong></br></li>
+<li>操作：set（key，value），get，has，delete，clear，size</br></li>
+<li>迭代<ul>
+<li>entries为for…of默认<br><img src="/static/imgForPosts/JavaScript/ModernCourse/map1.jpg"></br></li>
+</ul>
+</li>
+<li>forEach【参数三为可选。当前元素所属的数组对象】<br>  <img src="/static/imgForPosts/JavaScript/ModernCourse/map1.jpg"></br></li>
+<li>对象与Map转换<ul>
+<li>Object.entries：从对象创建Map</br></li>
+<li>Object.formEntries：从Map创建对象；【.entries可省略】<br><img src="/static/imgForPosts/JavaScript/ModernCourse/map3.jpg"></br></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Set<ul>
+<li><strong>value的集合，没有key</strong>。每个value<strong>唯一</strong></br></li>
+<li>操作：<strong>add</strong>，delete，has，clear，size</br></li>
+<li><strong>重复</strong>使用<strong>同一个值</strong>调用<strong>set.add(value)<strong>，</strong>不会发生改变【访客记录】</strong></br></li>
+<li>迭代：for…of，forEach</br></li>
+</ul>
+</li>
+</ol>
+<br/>
+<br/>
+
+<h3 id="WeakMap-and-WeakSet（弱映射与弱集合）"><a href="#WeakMap-and-WeakSet（弱映射与弱集合）" class="headerlink" title="WeakMap and WeakSet（弱映射与弱集合）###"></a>WeakMap and WeakSet（弱映射与弱集合）###</h3><ol>
+<li><strong>垃圾回收：JS引擎在值可访问（并可能被使用）时将其存储在内存中</strong></br></li>
+<li>WeakMap：仅允许<strong>对象</strong>作为key</br></li>
+<li>WeakSet：仅允许存储<strong>对象</strong></br></li>
+<li>一旦对象通过其它方式无法访问，相关联或对应的value将被删除</br></li>
+<li><strong>它们不支持迭代，因为不知道何时被回收</strong></br></li>
+<li>应用：缓存等<ul>
+<li><strong><a target="_blank" rel="noopener" href="https://zh.javascript.info/weakmap-weakset">应用例子</a></strong></li>
+</ul>
+</li>
+</ol>
+<br/>
+<br/>
+
+<h3 id="通用的迭代：keys，values，entries"><a href="#通用的迭代：keys，values，entries" class="headerlink" title="通用的迭代：keys，values，entries"></a>通用的迭代：keys，values，entries</h3><ol>
+<li>注意区别<br><img src="/static/imgForPosts/JavaScript/ModernCourse/normalIterable1.jpg"></br></li>
+<li>忽略Symbol属性<br><img src="/static/imgForPosts/JavaScript/ModernCourse/normalIterable2.jpg"></li>
+</ol>
+<br/>
+<br/>
+
+
+<h3 id="常用数组方法"><a href="#常用数组方法" class="headerlink" title="常用数组方法"></a>常用数组方法</h3><ol>
+<li>map&amp;filter过滤器<ul>
+<li>map返回调用函数处理后的数组</br></li>
+<li>filter返回调用函数<strong>处理判断后为true</strong>的数组</br></li>
+</ul>
+</li>
+<li>forEach：每个元素执行一次提供的函数，不返回</br></li>
+<li>reduce：arr.reduce（callback(total,currentVal,arr),initialVal）<ul>
+<li>默认total=arr[0],currentVal=arr[1],arr为调用reduce的数组、可选</li>
+<li><strong>initialVal修改total的默认值，则currentVal=arr[0]</strong></br></li>
+</ul>
+</li>
+<li>sort：<strong>接收函数，函数参数为a,b两个比较元素</strong>。a&gt;b，return 1，则a在b之后</br></li>
+<li>concat：连接数组，浅拷贝</br></li>
+<li>slice：<strong>不修改原数组，浅拷贝【begin，end）</strong></br></li>
+<li>splice：<strong>修改原数组，数组形式返回被修改内容</strong><ul>
+<li>start位，删除个数，替换元素列表<br><img src="/static/imgForPosts/JavaScript/ModernCourse/array.jpg"></li>
+</ul>
+</li>
+</ol>
+<br/>
+<br/>
+
+<h3 id="解构赋值"><a href="#解构赋值" class="headerlink" title="解构赋值"></a>解构赋值</h3><ol>
+<li>对任何可迭代对象适用：对象、数组、字符串</br></li>
+<li>数组模型<ul>
+<li>可嵌套<br><img src="/static/imgForPosts/JavaScript/ModernCourse/deconstr1.jpg"></br></li>
+<li>可忽略<br><img src="/static/imgForPosts/JavaScript/ModernCourse/deconstr2.jpg"></br></li>
+<li>剩余运算符<br><img src="/static/imgForPosts/JavaScript/ModernCourse/deconstr3.jpg"></br></li>
+</ul>
+</li>
+<li>对象模型<br> <img src="/static/imgForPosts/JavaScript/ModernCourse/deconstr4.jpg"></li>
+</ol>
+<br/>
+<br/>
+
+<h3 id="JSON方法"><a href="#JSON方法" class="headerlink" title="JSON方法"></a>JSON方法</h3><ul>
+<li>JSON.stringify【当对象中有toJSON方法，自动调用，类似toString】</br></li>
+<li>JSON.parse</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">KervinWen</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://kervinwen.github.io/2021/05/29/JS%E7%8E%B0%E4%BB%A3%E6%95%99%E7%A8%8B(2)/">https://kervinwen.github.io/2021/05/29/JS%E7%8E%B0%E4%BB%A3%E6%95%99%E7%A8%8B(2)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://kervinwen.github.io" target="_blank">KervinWen's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JavaScript/">JavaScript</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></div><div class="post_share"><div class="social-share" data-image="/static/imgForPosts/JavaScript/JavaScript.jpeg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/06/12/JS%E7%8E%B0%E4%BB%A3%E6%95%99%E7%A8%8B(3)/"><img class="prev-cover" src="/static/imgForPosts/JavaScript/JavaScript.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">JS现代教程(3)</div></div></a></div><div class="next-post pull-right"><a href="/2021/05/15/JS%E7%8E%B0%E4%BB%A3%E6%95%99%E7%A8%8B(1)/"><img class="next-cover" src="/static/imgForPosts/JavaScript/JavaScript.jpeg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">JS现代教程(1)</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2021/05/15/JS现代教程(1)/" title="JS现代教程(1)"><img class="cover" src="/static/imgForPosts/JavaScript/JavaScript.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-15</div><div class="title">JS现代教程(1)</div></div></a></div><div><a href="/2021/06/12/JS现代教程(3)/" title="JS现代教程(3)"><img class="cover" src="/static/imgForPosts/JavaScript/JavaScript.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-12</div><div class="title">JS现代教程(3)</div></div></a></div><div><a href="/2021/06/26/JS现代教程(4)/" title="JS现代教程(4)"><img class="cover" src="/static/imgForPosts/JavaScript/JavaScript.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-06-26</div><div class="title">JS现代教程(4)</div></div></a></div><div><a href="/2021/11/20/React-Redux/" title="React|Redux"><img class="cover" src="/static/imgForPosts/React/React.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-20</div><div class="title">React|Redux</div></div></a></div><div><a href="/2021/10/30/React-基础/" title="React|基础"><img class="cover" src="/static/imgForPosts/React/React.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-10-30</div><div class="title">React|基础</div></div></a></div><div><a href="/2021/12/18/Vue-VueX/" title="Vue|VueX"><img class="cover" src="/static/imgForPosts/Vue/Vue.jpeg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-18</div><div class="title">Vue|VueX</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/static/icon/CuteDargen.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">KervinWen</div><div class="author-info__description">深圳大学  物联网工程  2022届  <br> 前端开发攻城狮一只ヾ(≧O≦)〃嗷~ <br> 业余B-BOY | 入门Rapper  <br> 广府吃货 | 🏀&⚽迷</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">15</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/KervinWen"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/kervinwen" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:kervinwen@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="/static/personal-info/WeChat.webp" target="_blank" title="微信"><i class="fab fa-weixin"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=958830530" target="_blank" title=""><i class="fab fa-qq"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">掘金： <br> 知乎： <br> 目前尚未就绪，会陆续上线 <br>欢迎关注，会持续更新技术博文~☝️</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9B%B8%E5%85%B3"><span class="toc-number">1.</span> <span class="toc-text">数据类型相关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%BF%AD%E4%BB%A3%EF%BC%88Iterable%EF%BC%89%E5%AF%B9%E8%B1%A1%E4%B8%8E%E7%B1%BB%E6%95%B0%E7%BB%84%EF%BC%88array-like%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">可迭代（Iterable）对象与类数组（array-like）###</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Map-and-Set%EF%BC%88%E6%98%A0%E5%B0%84%E4%B8%8E%E9%9B%86%E5%90%88%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">Map and Set（映射与集合）###</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WeakMap-and-WeakSet%EF%BC%88%E5%BC%B1%E6%98%A0%E5%B0%84%E4%B8%8E%E5%BC%B1%E9%9B%86%E5%90%88%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">WeakMap and WeakSet（弱映射与弱集合）###</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E7%9A%84%E8%BF%AD%E4%BB%A3%EF%BC%9Akeys%EF%BC%8Cvalues%EF%BC%8Centries"><span class="toc-number">1.4.</span> <span class="toc-text">通用的迭代：keys，values，entries</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%95%B0%E7%BB%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.5.</span> <span class="toc-text">常用数组方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E6%9E%84%E8%B5%8B%E5%80%BC"><span class="toc-number">1.6.</span> <span class="toc-text">解构赋值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JSON%E6%96%B9%E6%B3%95"><span class="toc-number">1.7.</span> <span class="toc-text">JSON方法</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2022/01/08/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-2/" title="正则表达式-2"><img src="/static/imgForPosts/JavaScript/Regx.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正则表达式-2"/></a><div class="content"><a class="title" href="/2022/01/08/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-2/" title="正则表达式-2">正则表达式-2</a><time datetime="2022-01-08T14:05:55.000Z" title="发表于 2022-01-08 22:05:55">2022-01-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/26/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-1/" title="正则表达式-1"><img src="/static/imgForPosts/JavaScript/Regx.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="正则表达式-1"/></a><div class="content"><a class="title" href="/2021/12/26/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-1/" title="正则表达式-1">正则表达式-1</a><time datetime="2021-12-26T14:05:45.000Z" title="发表于 2021-12-26 22:05:45">2021-12-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/18/Vue-VueX/" title="Vue|VueX"><img src="/static/imgForPosts/Vue/Vue.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue|VueX"/></a><div class="content"><a class="title" href="/2021/12/18/Vue-VueX/" title="Vue|VueX">Vue|VueX</a><time datetime="2021-12-18T14:28:33.000Z" title="发表于 2021-12-18 22:28:33">2021-12-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/12/04/Vue-%E5%9F%BA%E7%A1%80/" title="Vue|基础"><img src="/static/imgForPosts/Vue/Vue.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Vue|基础"/></a><div class="content"><a class="title" href="/2021/12/04/Vue-%E5%9F%BA%E7%A1%80/" title="Vue|基础">Vue|基础</a><time datetime="2021-12-04T14:11:20.000Z" title="发表于 2021-12-04 22:11:20">2021-12-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/11/20/React-Redux/" title="React|Redux"><img src="/static/imgForPosts/React/React.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="React|Redux"/></a><div class="content"><a class="title" href="/2021/11/20/React-Redux/" title="React|Redux">React|Redux</a><time datetime="2021-11-20T14:24:29.000Z" title="发表于 2021-11-20 22:24:29">2021-11-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By KervinWen</div><div class="footer_custom_text">到底啦~这里可没有击穿地心的方法(〃＞皿＜)</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'nTaM1rNlLQRlRCERmE1huoaB-gzGzoHsz',
+      appKey: 'qzBShfPCIq0aofxv4ADNXEER',
+      placeholder: '有什么想法嘛？记得留下昵称和邮箱~我会尽快回复你的~😏😏😏',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '/_data/valine.json',
+      emojiMaps: {"tv_doge":"6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","tv_亲亲":"a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","tv_偷笑":"bb690d4107620f1c15cff29509db529a73aee261.png","tv_再见":"180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","tv_冷漠":"b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","tv_发怒":"34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","tv_发财":"34db290afd2963723c6eb3c4560667db7253a21a.png","tv_可爱":"9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","tv_吐血":"09dd16a7aa59b77baa1155d47484409624470c77.png","tv_呆":"fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","tv_呕吐":"9f996894a39e282ccf5e66856af49483f81870f3.png","tv_困":"241ee304e44c0af029adceb294399391e4737ef2.png","tv_坏笑":"1f0b87f731a671079842116e0991c91c2c88645a.png","tv_大佬":"093c1e2c490161aca397afc45573c877cdead616.png","tv_大哭":"23269aeb35f99daee28dda129676f6e9ea87934f.png","tv_委屈":"d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","tv_害羞":"a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","tv_尴尬":"7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","tv_微笑":"70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","tv_思考":"90cf159733e558137ed20aa04d09964436f618a1.png","tv_惊吓":"0d15c7e2ee58e935adc6a7193ee042388adc22af.png"},
+      enableQQ: true,
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
